@@ -1,16 +1,20 @@
-import { useState } from 'react'
+import { useEffect, useState } from "react";
 import ToDo from './ToDo'
 import DiariesList from './DiariesList';
 import './App.css'
 
-function App() {
-  const [todos, setTodos] = useState([
-    { id: 1, task: "Iemācīties React", completed: false },
-    { id: 2, task: "Iemācīties Laravel", completed: true },
-    { id: 3, task: "Nopirkt pienu", completed: false },
-  ]);
+function getLocalTodos() {
+  const stored = localStorage.getItem("todos");
+  return stored ? JSON.parse(stored) : [];
+}
 
+function App() {
+  const [todos, setTodos] = useState(getLocalTodos);
   const [newTask, setNewTask] = useState("");
+
+  useEffect(() => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}, [todos]);
 
   function handleAdd(event) {
     event.preventDefault();

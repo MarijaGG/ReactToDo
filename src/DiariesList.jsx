@@ -1,30 +1,20 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from "react";
 import Diary from './Diary';
 
-function DiariesList() {
-  const [diaries, setDiaries] = useState([
-    {
-      id: 1,
-      title: 'Spēles',
-      body: 'Spēlēju Grow a Garden.',
-      date: '2025-05-01',
-    },
-    {
-      id: 2,
-      title: 'Skola',
-      body: 'Pavadīju visu dienu strādājot pie React projekta.',
-      date: '2025-05-10',
-    },
-    {
-      id: 3,
-      title: 'Atpūta',
-      body: 'Vēl vairāk Grow a Garden.',
-      date: '2025-05-12',
-    },
-  ]);
+function getLocalDiary() {
+  const stored = localStorage.getItem("diaries");
+  return stored ? JSON.parse(stored) : [];
+}
 
+
+function DiariesList() {
+  const [diaries, setDiaries] = useState(getLocalDiary);
   const [newTitle, setNewTitle] = useState('');
   const [newBody, setNewBody] = useState('');
+
+    useEffect(() => {
+    localStorage.setItem("diaries", JSON.stringify(diaries));
+  }, [diaries]);
 
   function handleAdd(event) {
     event.preventDefault();
